@@ -83,7 +83,7 @@ int Atacar()
                 {
                     if(strcmp(tablero[3]," ")==0)
                     {
-                        strcpy(tablero[2],"O");
+                        strcpy(tablero[3],"O");
                         movimiento=1;
                         return 0;
                     }
@@ -120,7 +120,7 @@ int Atacar()
                 {
                     if(strcmp(tablero[5]," ")==0)
                     {
-                        strcpy(tablero[4],"O");
+                        strcpy(tablero[5],"O");
                         movimiento=1;
                         return 0;
                     }
