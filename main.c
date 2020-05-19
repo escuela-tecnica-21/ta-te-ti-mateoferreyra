@@ -4,6 +4,7 @@
 #include <conio.h>
 
 
+
 char tablero[9][2];
 int lugar_ocupado[9],movimiento;
 int main()
