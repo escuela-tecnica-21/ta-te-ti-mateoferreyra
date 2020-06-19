@@ -1,25 +1,24 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
+#include <conio2.h>
 
 
-
-char tablero[9][2];
-int lugar_ocupado[9],movimiento;
+char tablero[9][2]; //Se usa para almacebar los datos del tablero
+int lugar_ocupado[9],movimiento; //Lugar_ocupado sirve para que no sobreescribir los datos osea que no se pueda poner una ficha sobre la otra
 int main()
 {
-    char res[5];
+    char respuesta1[3]; // respuesta1 lo que almacena es la respuesta de SI o NO
     int y,respuesta;
-    llenado();
+    llenadoVector(); // FUNCION DE LLENAR VECTORES EN VACIO
 
         while(1)
         {
             system("cls");
-            tablero_dibujado(); //FUNCION DE DIBUJAR EL TABLERO
+            Dibujar_tablero(); //FUNCION DE DIBUJAR EL TABLERO
             printf("desea poner una X? si o no\t");
-            scanf("%s",&res);
-            if (strcmp(res,"si")==0)
+            scanf("%s",&respuesta1);
+            if (strcmp(respuesta1,"si")==0)
             {
                 printf("ingrese un numero del 1 al 9\n¿ donde quiere poner la X ? = ");
                 scanf("%d",&respuesta);
@@ -30,7 +29,7 @@ int main()
                 }
 
             }
-            if(strcmp(res,"no")==0)
+            if(strcmp(respuesta1,"no")==0)
             {
                 break;
             }
@@ -38,13 +37,13 @@ int main()
         while(1)
         {
             system("cls");
-            tablero_dibujado(); //FUNCION DE DIBUJAR EL TABLERO
+            Dibujar_tablero(); //FUNCION DE DIBUJAR EL TABLERO
             printf("desea poner una O? si o no\t");
-            scanf("%s",&res);
-            if (strcmp(res,"si")==0)
+            scanf("%s",&respuesta1);
+            if (strcmp(respuesta1,"si")==0)
             {
                 system("cls");
-                tablero_dibujado();//FUNCION DE DIBUJAR EL TABLERO
+                Dibujar_tablero();//FUNCION DE DIBUJAR EL TABLERO
                 printf("ingrese un numero del 1 al 9\n¿donde quiere pon er la O ? = ");
                 scanf("%d",&respuesta);
                 if (lugar_ocupado[respuesta-1]==0 && respuesta > 0 && respuesta < 10)
@@ -53,19 +52,19 @@ int main()
                     lugar_ocupado[respuesta-1]=1;//se va a ocupar el lugar donde el usuario quiera
                 }
             }
-            if(strcmp(res,"no")==0)
+            if(strcmp(respuesta1,"no")==0)
             {
                 break;
             }
         }
-        Defensa();
-        Atacar();
+        DefensaIA(); //Sirve para que la maquina sepa en donde poner la ficha evitando que el jugador gane
+        AtaqueIA(); //Sirve para ver si hay dos fichas iguales para poder poner la tercera y ganar
 
     system("cls");
-    tablero_dibujado();
+    Dibujar_tablero();
 }
 // FUNCION DE LLENAR VECTORES EN VACIO
-void llenado()
+void llenadoVector()
 {
     int x=0;
     for(x=0;x<9;x++)
@@ -74,16 +73,15 @@ void llenado()
     }
 }
 //FUNCION DE DIBUJAR EL TABLERO
-void tablero_dibujado()
+void Dibujar_tablero()
 {
     printf(" %s | %s | %s \n---+---+---\n %s | %s | %s\n---+---+---\n %s | %s | %s\n",tablero[0],tablero[1],tablero[2],tablero[3],tablero[4],tablero[5],tablero[6],tablero[7],tablero[8]);
 }
 //FUNCION IA
-int Atacar()
+int AtaqueIA()
 {
-
     //FILA 1 ----------------------------------------------------------------
-                if(strcmp(tablero[0],"O")==0 && strcmp(tablero[1],"O")==0)
+        if(strcmp(tablero[0],"O")==0 && strcmp(tablero[1],"O")==0)
                 {
                     if(strcmp(tablero[2]," ")==0)
                     {
@@ -92,6 +90,7 @@ int Atacar()
                         return 0;
                     }
                 }
+
                 if(strcmp(tablero[0],"O")==0 && strcmp(tablero[2],"O")==0)
                 {
                     if(strcmp(tablero[1]," ")==0)
@@ -309,7 +308,7 @@ int Atacar()
             }
 
 }
-int Defensa()
+int DefensaIA()
 {
     //FILA 1 ----------------------------------------------------------------
                 if(strcmp(tablero[0],"X")==0 && strcmp(tablero[1],"X")==0)
@@ -539,3 +538,5 @@ int Defensa()
 
 
 }
+
+
