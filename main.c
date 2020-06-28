@@ -1,70 +1,39 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <conio.h>
 #include <conio2.h>
 
 
-char tablero[9][2]; //Se usa para almacebar los datos del tablero
-int lugar_ocupado[9],movimiento; //Lugar_ocupado sirve para que no sobreescribir los datos osea que no se pueda poner una ficha sobre la otra
+int Iniciar_Tablero(char Tablero);
+void Dibujar_tablero(char Tablero);
+int PartidaTerminada(char Tablero);
+int Victoria(char Tablero);
+int verificador_de_espacioblanco(char Tablero[],char simbolo, int a, int b, int c);
+int Empate(char Tablero);
+int Contador_de_Vacio(char Tablero[]);
+//int Turno_Jugador(char Tablero);
+//int Turno_Maquina();
+//int Ganar_Maquina();
+
+int const posibilidad[][3]= {{0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{2,5,8},{0,4,8},{2,4,6}};
+
 int main()
 {
-    char respuesta1[3]; // respuesta1 lo que almacena es la respuesta de SI o NO
-    int y,respuesta;
-    llenadoVector(); // FUNCION DE LLENAR VECTORES EN VACIO
-
-        while(1)
-        {
-            system("cls");
-            Dibujar_tablero(); //FUNCION DE DIBUJAR EL TABLERO
-            printf("desea poner una X? si o no\t");
-            scanf("%s",&respuesta1);
-            if (strcmp(respuesta1,"si")==0)
-            {
-                printf("ingrese un numero del 1 al 9\n¿ donde quiere poner la X ? = ");
-                scanf("%d",&respuesta);
-                if (lugar_ocupado[respuesta-1]==0 && respuesta > 0 && respuesta < 10)
-                {
-                    strcpy(tablero[respuesta-1],"X");//en casillero que pone el usuario pone una O
-                    lugar_ocupado[respuesta-1]=1;//se va a ocupar el lugar donde el usuario quiera
-                }
-
-            }
-            if(strcmp(respuesta1,"no")==0)
-            {
-                break;
-            }
-        }
-        while(1)
-        {
-            system("cls");
-            Dibujar_tablero(); //FUNCION DE DIBUJAR EL TABLERO
-            printf("desea poner una O? si o no\t");
-            scanf("%s",&respuesta1);
-            if (strcmp(respuesta1,"si")==0)
-            {
-                system("cls");
-                Dibujar_tablero();//FUNCION DE DIBUJAR EL TABLERO
-                printf("ingrese un numero del 1 al 9\n¿donde quiere pon er la O ? = ");
-                scanf("%d",&respuesta);
-                if (lugar_ocupado[respuesta-1]==0 && respuesta > 0 && respuesta < 10)
-                {
-                    strcpy(tablero[respuesta-1],"O");//en casillero que pone el usuario pone una O
-                    lugar_ocupado[respuesta-1]=1;//se va a ocupar el lugar donde el usuario quiera
-                }
-            }
-            if(strcmp(respuesta1,"no")==0)
-            {
-                break;
-            }
-        }
-        DefensaIA(); //Sirve para que la maquina sepa en donde poner la ficha evitando que el jugador gane
-        AtaqueIA(); //Sirve para ver si hay dos fichas iguales para poder poner la tercera y ganar
-
-    system("cls");
-    Dibujar_tablero();
+     char Tablero[9];
+    Iniciar_Tablero(Tablero);
+    Dibujar_tablero(Tablero);
+    while(Estado_Partido(Tablero)==0)
+    {
+        Turno_Jugador(Tablero);
+        Dibujar_tablero(Tablero);
+        Turno_Maquina(Tablero);
+        Dibujar_tablero(Tablero);
+    }
+    return 0;
 }
-// FUNCION DE LLENAR VECTORES EN VACIO
-void llenadoVector()
+void Iniciar_Tablero()
 {
     int x=0;
     for(x=0;x<9;x++)
@@ -72,471 +41,43 @@ void llenadoVector()
         strcpy(tablero[x]," ");
     }
 }
-//FUNCION DE DIBUJAR EL TABLERO
-void Dibujar_tablero()
+void Dibujar_tablero(char tablero[])
 {
     printf(" %s | %s | %s \n---+---+---\n %s | %s | %s\n---+---+---\n %s | %s | %s\n",tablero[0],tablero[1],tablero[2],tablero[3],tablero[4],tablero[5],tablero[6],tablero[7],tablero[8]);
 }
-//FUNCION IA
-int AtaqueIA()
+int Victoria(char Tablero[])
 {
-    //FILA 1 ----------------------------------------------------------------
-        if(strcmp(tablero[0],"O")==0 && strcmp(tablero[1],"O")==0)
-                {
-                    if(strcmp(tablero[2]," ")==0)
-                    {
-                        strcpy(tablero[2],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-
-                if(strcmp(tablero[0],"O")==0 && strcmp(tablero[2],"O")==0)
-                {
-                    if(strcmp(tablero[1]," ")==0)
-                    {
-                        strcpy(tablero[1],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[1],"O")==0 && strcmp(tablero[2],"O")==0)
-                {
-                    if(strcmp(tablero[0]," ")==0)
-                    {
-                        strcpy(tablero[0],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-    //FILA 2 ---------------------------------------------------------------
-                if(strcmp(tablero[3],"O")==0 && strcmp(tablero[4],"O")==0)
-                {
-                    if(strcmp(tablero[5]," ")==0)
-                    {
-                        strcpy(tablero[5],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[3],"O")==0 && strcmp(tablero[5],"O")==0)
-                {
-                    if(strcmp(tablero[4]," ")==0)
-                    {
-                        strcpy(tablero[4],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[4],"O")==0 && strcmp(tablero[5],"O")==0)
-                {
-                    if(strcmp(tablero[3]," ")==0)
-                    {
-                        strcpy(tablero[3],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-     //FILA 3 -------------------------------------------------------------
-                if(strcmp(tablero[6],"O")==0 && strcmp(tablero[7],"O")==0)
-                {
-                    if(strcmp(tablero[8]," ")==0)
-                    {
-                        strcpy(tablero[8],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[6],"O")==0 && strcmp(tablero[8],"O")==0)
-                {
-                    if(strcmp(tablero[7]," ")==0)
-                    {
-                        strcpy(tablero[7],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[8],"O")==0 && strcmp(tablero[7],"O")==0)
-                {
-                    if(strcmp(tablero[6]," ")==0)
-                    {
-                        strcpy(tablero[6],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-  //COLUMNA 1 ---------------------------------------------------------------
-                if(strcmp(tablero[0],"O")==0 && strcmp(tablero[3],"O")==0)
-                {
-                    if(strcmp(tablero[6]," ")==0)
-                    {
-                        strcpy(tablero[6],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[0],"O")==0 && strcmp(tablero[6],"O")==0)
-                {
-                    if(strcmp(tablero[3]," ")==0)
-                    {
-                        strcpy(tablero[3],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[6],"O")==0 && strcmp(tablero[3],"O")==0)
-                {
-                    if(strcmp(tablero[0]," ")==0)
-                    {
-                        strcpy(tablero[0],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-    //COLUMNA 2 -------------------------------------------------------------
-                if(strcmp(tablero[1],"O")==0 && strcmp(tablero[4],"O")==0)
-                {
-                    if(strcmp(tablero[7]," ")==0)
-                    {
-                        strcpy(tablero[7],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[1],"O")==0 && strcmp(tablero[7],"O")==0)
-                {
-                    if(strcmp(tablero[4]," ")==0)
-                    {
-                        strcpy(tablero[4],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[4],"O")==0 && strcmp(tablero[7],"O")==0)
-                {
-                    if(strcmp(tablero[1]," ")==0)
-                    {
-                        strcpy(tablero[1],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-    //COLUMNA 3 ---------------------------------------------------------------
-                if(strcmp(tablero[2],"O")==0 && strcmp(tablero[5],"O")==0)
-                {
-                    if(strcmp(tablero[8]," ")==0)
-                    {
-                        strcpy(tablero[8],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[2],"O")==0 && strcmp(tablero[8],"O")==0)
-                {
-                    if(strcmp(tablero[5]," ")==0)
-                    {
-                        strcpy(tablero[5],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[8],"O")==0 && strcmp(tablero[5],"O")==0)
-                {
-                    if(strcmp(tablero[2]," ")==0)
-                    {
-                        strcpy(tablero[2],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-    //DIAGONAL 1 ----------------------------------------------------
-     if(strcmp(tablero[0],"O")==0 && strcmp(tablero[4],"O")==0)
-            {
-                if(strcmp(tablero[8]," ")==0)
-                {
-                    strcpy(tablero[8],"O");
-                    movimiento=1;
-                    return 0;
-                }
-            }
-
-            if(strcmp(tablero[4],"O")==0 && strcmp(tablero[8],"O")==0)
-            {
-                if(strcmp(tablero[0]," ")==0)
-                {
-                    strcpy(tablero[0],"O");
-                    movimiento=1;
-                    return 0;
-                }
-            }
-            if(strcmp(tablero[4],"O")==0 && strcmp(tablero[8],"O")==0)
-            {
-                if(strcmp(tablero[0]," ")==0)
-                {
-                    strcpy(tablero[0],"O");
-                    movimiento=1;
-                    return 0;
-                }
-            }
-    //DIAGONAL 2------------------------------------------------------------
-            if(strcmp(tablero[4],"O")==0 && strcmp(tablero[2],"O")==0)
-            {
-                if(strcmp(tablero[6]," ")==0)
-                {
-                    strcpy(tablero[6],"O");
-                    movimiento=1;
-                    return 0;
-                }
-            }
-            if(strcmp(tablero[2],"O")==0 && strcmp(tablero[6],"O")==0)
-            {
-                if(strcmp(tablero[4]," ")==0)
-                {
-                    strcpy(tablero[4],"O");
-                    movimiento=1;
-                    return 0;
-                }
-            }
-            if(strcmp(tablero[6],"O")==0 && strcmp(tablero[4],"O")==0)
-            {
-                if(strcmp(tablero[2]," ")==0)
-                {
-                    strcpy(tablero[2],"O");
-                    movimiento=1;
-                    return 0;
-                }
-            }
-
+    for(int x=0;x<9;x++){
+       if(Contador(Tablero, 'X', posibilidad[x][0], posibilidad[x][1], posibilidad[x][2])==3)
+            return 0;
+       if(Contador(Tablero, 'O', posibilidad[x][0], posibilidad[x][1], posibilidad[x][2])==3)
+            return 0;
+    }return 1;
 }
-int DefensaIA()
+int Contador_de_Victoria(char Tablero[],char simbolo, int a, int b, int c)
 {
-    //FILA 1 ----------------------------------------------------------------
-                if(strcmp(tablero[0],"X")==0 && strcmp(tablero[1],"X")==0)
-                {
-                    if(strcmp(tablero[2]," ")==0)
-                    {
-                        strcpy(tablero[2],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[0],"X")==0 && strcmp(tablero[2],"X")==0)
-                {
-                    if(strcmp(tablero[1]," ")==0)
-                    {
-                        strcpy(tablero[1],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[1],"X")==0 && strcmp(tablero[2],"X")==0)
-                {
-                    if(strcmp(tablero[0]," ")==0)
-                    {
-                        strcpy(tablero[0],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-    //FILA 2 ---------------------------------------------------------------
-                if(strcmp(tablero[3],"X")==0 && strcmp(tablero[4],"X")==0)
-                {
-                    if(strcmp(tablero[5]," ")==0)
-                    {
-                        strcpy(tablero[5],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[3],"X")==0 && strcmp(tablero[5],"X")==0)
-                {
-                    if(strcmp(tablero[4]," ")==0)
-                    {
-                        strcpy(tablero[4],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[4],"X")==0 && strcmp(tablero[5],"X")==0)
-                {
-                    if(strcmp(tablero[3]," ")==0)
-                    {
-                        strcpy(tablero[3],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-     //FILA 3 -------------------------------------------------------------
-                if(strcmp(tablero[6],"X")==0 && strcmp(tablero[7],"X")==0)
-                {
-                    if(strcmp(tablero[8]," ")==0)
-                    {
-                        strcpy(tablero[8],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[6],"X")==0 && strcmp(tablero[8],"X")==0)
-                {
-                    if(strcmp(tablero[7]," ")==0)
-                    {
-                        strcpy(tablero[7],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[8],"X")==0 && strcmp(tablero[7],"X")==0)
-                {
-                    if(strcmp(tablero[6]," ")==0)
-                    {
-                        strcpy(tablero[6],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-  //COLUMNA 1 ---------------------------------------------------------------
-                if(strcmp(tablero[0],"X")==0 && strcmp(tablero[3],"X")==0)
-                {
-                    if(strcmp(tablero[6]," ")==0)
-                    {
-                        strcpy(tablero[6],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[0],"X")==0 && strcmp(tablero[6],"X")==0)
-                {
-                    if(strcmp(tablero[3]," ")==0)
-                    {
-                        strcpy(tablero[3],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[6],"X")==0 && strcmp(tablero[3],"X")==0)
-                {
-                    if(strcmp(tablero[0]," ")==0)
-                    {
-                        strcpy(tablero[0],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-    //COLUMNA 2 -------------------------------------------------------------
-                if(strcmp(tablero[1],"X")==0 && strcmp(tablero[4],"X")==0)
-                {
-                    if(strcmp(tablero[7]," ")==0)
-                    {
-                        strcpy(tablero[7],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[1],"X")==0 && strcmp(tablero[7],"X")==0)
-                {
-                    if(strcmp(tablero[4]," ")==0)
-                    {
-                        strcpy(tablero[4],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[4],"X")==0 && strcmp(tablero[7],"X")==0)
-                {
-                    if(strcmp(tablero[1]," ")==0)
-                    {
-                        strcpy(tablero[1],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-    //COLUMNA 3 ---------------------------------------------------------------
-                if(strcmp(tablero[2],"X")==0 && strcmp(tablero[5],"X")==0)
-                {
-                    if(strcmp(tablero[8]," ")==0)
-                    {
-                        strcpy(tablero[8],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[2],"X")==0 && strcmp(tablero[8],"X")==0)
-                {
-                    if(strcmp(tablero[5]," ")==0)
-                    {
-                        strcpy(tablero[5],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-                if(strcmp(tablero[8],"X")==0 && strcmp(tablero[5],"X")==0)
-                {
-                    if(strcmp(tablero[2]," ")==0)
-                    {
-                        strcpy(tablero[2],"O");
-                        movimiento=1;
-                        return 0;
-                    }
-                }
-    //DIAGONAL 1 ----------------------------------------------------
-     if(strcmp(tablero[0],"X")==0 && strcmp(tablero[4],"X")==0)
-            {
-                if(strcmp(tablero[8]," ")==0)
-                {
-                    strcpy(tablero[8],"O");
-                    movimiento=1;
-                    return 0;
-                }
-            }
-
-            if(strcmp(tablero[4],"X")==0 && strcmp(tablero[8],"X")==0)
-            {
-                if(strcmp(tablero[0]," ")==0)
-                {
-                    strcpy(tablero[0],"O");
-                    movimiento=1;
-                    return 0;
-                }
-            }
-            if(strcmp(tablero[4],"X")==0 && strcmp(tablero[8],"X")==0)
-            {
-                if(strcmp(tablero[0]," ")==0)
-                {
-                    strcpy(tablero[0],"O");
-                    movimiento=1;
-                    return 0;
-                }
-            }
-    //DIAGONAL 2------------------------------------------------------------
-            if(strcmp(tablero[4],"X")==0 && strcmp(tablero[2],"X")==0)
-            {
-                if(strcmp(tablero[6]," ")==0)
-                {
-                    strcpy(tablero[6],"O");
-                    movimiento=1;
-                    return 0;
-                }
-            }
-            if(strcmp(tablero[2],"X")==0 && strcmp(tablero[6],"X")==0)
-            {
-                if(strcmp(tablero[4]," ")==0)
-                {
-                    strcpy(tablero[4],"O");
-                    movimiento=1;
-                    return 0;
-                }
-            }
-            if(strcmp(tablero[6],"X")==0 && strcmp(tablero[4],"X")==0)
-            {
-                if(strcmp(tablero[2]," ")==0)
-                {
-                    strcpy(tablero[2],"O");
-                    movimiento=1;
-                    return 0;
-                }
-            }
-
-
+    int Suma=0;
+    if(Tablero[a]==simbolo)Suma++;
+    if(Tablero[b]==simbolo)Suma++;
+    if(Tablero[c]==simbolo)Suma++;
+    return Suma;
 }
-
+int Contador_de_Vacio(char Tablero[])
+{
+    int Suma;
+    for(int x=0;x<9;x++)
+        {
+        if(Tablero[x]==" ")suma++;
+        }
+    return Suma;
+        
+    }
+int Empate(char Tablero[])
+{
+     if(Contador_de_Vacio(Tablero)==0)
+        return 1;
+    else{
+        return 0;
+    }
+}
 
