@@ -13,11 +13,13 @@ int Victoria(char Tablero);
 int verificador_de_espacioblanco(char Tablero[],char simbolo, int a, int b, int c);
 int Empate(char Tablero);
 int Contador_de_Vacio(char Tablero[]);
+int Lugar_Vacio(char Tablero, int Posicion);
 //int Turno_Jugador(char Tablero);
 //int Turno_Maquina();
 //int Ganar_Maquina();
 
 int const posibilidad[][3]= {{0,1,2},{3,4,5},{6,7,8},{0,3,6},{1,4,7},{2,5,8},{0,4,8},{2,4,6}};
+
 
 int main()
 {
@@ -28,7 +30,7 @@ int main()
     {
         Turno_Jugador(Tablero);
         Dibujar_tablero(Tablero);
-        Turno_Maquina(Tablero);
+        Tablero[Turno_Maquina(Tablero)]== 'O';
         Dibujar_tablero(Tablero);
     }
     return 0;
@@ -70,7 +72,7 @@ int Contador_de_Vacio(char Tablero[])
         if(Tablero[x]==" ")suma++;
         }
     return Suma;
-        
+
     }
 int Empate(char Tablero[])
 {
@@ -80,4 +82,14 @@ int Empate(char Tablero[])
         return 0;
     }
 }
-
+int PartidaTerminada(char tablero[])
+{
+    return (Victoria(tablero) || Empate(tablero));
+}
+int Lugar_Vacio(char Tablero, Posicion)
+{
+    if(Tablero[Posicion]==' ')
+        return 0;
+    printf("Lugar no disponible");
+    return 1;
+}
