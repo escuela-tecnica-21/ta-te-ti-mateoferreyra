@@ -1,3 +1,29 @@
+/** PRUEBA **/
+object corredor {
+	
+	var km = 0
+	
+	
+	method cuantosKMcorriste() {
+		return km
+	}
+	
+	method corre(cantidadekm) {
+		if (km < 10){
+			console.println ("mira que yo corro 10km por dia, no me pidas mas")
+			km = km + cantidadekm
+		}
+		else
+		console.println ("ya corri los 10km del dia, no quiero correr mas")
+	}
+	
+	method epezemosdenuevo() {
+		 km = 0
+	}
+	
+}
+
+-------------------------------------------------------------------------------------------------------------------------
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdio.h>
